@@ -1,0 +1,7 @@
+Desafio 4: Conhecimento administração/manutenção em banco de dados:
+Sugira pelo menos 2 índices para as tabelas citadas no desafio, e descreva o motivo.
+
+Indice 1: vendas – tprodutos – Id_produto.
+Indice 2: vendas - tvendas    –  Id_venda
+
+Ambos esses índices seriam muito utilizados tornando-os mais eficientes, o primeiro, toda vez que o preço de um produto precise ser acessado, que é durante todas as vendas, e o segundo, toda vez que o vendedor deseje consultar os detalhes de uma venda (históricos antigos e também a atual), antes de finalizar a transação.

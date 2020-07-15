@@ -1,0 +1,12 @@
+DESAFIO 6: Teste de comunicação:
+//REDACTED* 
+//Removido pois considerei o conteúdo da descricao improprio para um depositorio publico.
+
+Olá [Nome Funcionário Cliente], 
+Durante a avaliação rotineira de novas funcionalidades, realizada para garantir que os padrões de qualidade de operacionalidade, desempenho e performance sejam atendidos de maneira holística, determinamos que alguns aspectos do produto desenvolvido ainda necessitam de aprimoramentos para alcançar o nível da entrega que desejamos realizar.
+O que isso significa?
+Estamos atuando na realização de ajustes, e por conta disso, postergamos a previsão de entrega final por um período de quinze (15) dias. Após analisar o caso pesando os elementos envolvidos, entendemos que esta é a melhor alternativa.
+Pedimos desculpas pelo ocorrido, estamos trabalhando arduamente para normalizar a situação. Valorizamos a relação de confiança com [Inserir nome Empresa] alinhada com o nosso propósito de potencializar negócios através de nossas soluções. 
+Permaneço a disposição para prestar esclarecimentos futuros,
+Atenciosamente,
+Gabriel Augusto

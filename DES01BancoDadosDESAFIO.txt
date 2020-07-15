@@ -1,0 +1,241 @@
+Desafio 01: Modelagem do banco de dados: Enviar arquivos “.SQL”para criação do banco de dados necessário para desenvolver o sistema do desafio.  acima,contendo:•Tabelas•Relacionamentos entre elas•Campos e seus respectivos tipos - Utilize a ferramenta que melhor convir, lembrando que os bancos propostos são SQL Server ou MySQL.
+
+-- MySQL Workbench Forward Engineering
+
+*Tomei a liberdade de elaborar um pouco mais o cenário de testes proposto, fui criando as tabelas, fazendo as ligações e definindo atributos, acabei finalizando uma espécie de MER para vendas, de uma loja, com cadastros para os clientes e funcionários.
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema vendas
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema vendas
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `vendas` DEFAULT CHARACTER SET utf8 ;
+USE `vendas` ;
+
+-- -----------------------------------------------------
+-- Table `vendas`.`tfornecedores`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vendas`.`tfornecedores` (
+  `Id_fornecedor` INT(11) NOT NULL,
+  `razao_social` VARCHAR(80) NULL DEFAULT NULL,
+  `CNPJ` VARCHAR(100) NULL DEFAULT NULL,
+  `Telefone` INT(11) NULL DEFAULT NULL,
+  `Email` VARCHAR(100) NULL DEFAULT NULL,
+  `Contato` VARCHAR(40) NULL DEFAULT NULL,
+  PRIMARY KEY (`Id_fornecedor`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `vendas`.`tprodutos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vendas`.`tprodutos` (
+  `Id_produto` INT(11) NOT NULL,
+  `Descricao` VARCHAR(200) NULL DEFAULT NULL,
+  `valor` DOUBLE NULL DEFAULT NULL,
+  `tfornecedores_Id_fornecedor` INT(11) NOT NULL,
+  PRIMARY KEY (`Id_produto`),
+  INDEX `fk_tprodutos_tfornecedores1_idx` (`tfornecedores_Id_fornecedor` ASC),
+  CONSTRAINT `fk_tprodutos_tfornecedores1`
+    FOREIGN KEY (`tfornecedores_Id_fornecedor`)
+    REFERENCES `vendas`.`tfornecedores` (`Id_fornecedor`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `vendas`.`titensvenda`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vendas`.`itensvenda` (
+  `Id_itensvenda` INT(11) NOT NULL,
+  `id_produto` INT(11) NULL DEFAULT NULL,
+  `quantidade` DECIMAL(10,2) NULL DEFAULT NULL,
+  `valor_venda` DECIMAL(10,4) NULL DEFAULT NULL,
+  PRIMARY KEY (`Id_itensvenda`),
+  INDEX `id_produto` (`id_produto` ASC),
+  CONSTRAINT `itensvenda_ibfk_1`
+    FOREIGN KEY (`id_produto`)
+    REFERENCES `vendas`.`tprodutos` (`Id_produto`)
+    ON DELETE SET NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `vendas`.`tbairro`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vendas`.`tbairro` (
+  `Id_bairro` INT(11) NOT NULL,
+  `bairrro` VARCHAR(100) NULL DEFAULT NULL,
+  PRIMARY KEY (`Id_bairro`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `vendas`.`tcidade`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vendas`.`tcidade` (
+  `Id_cidade` INT(11) NOT NULL,
+  `cidade` VARCHAR(100) NULL DEFAULT NULL,
+  `Cep` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`Id_cidade`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `vendas`.`tlogradouro`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vendas`.`tlogradouro` (
+  `Id_logradouro` INT(11) NOT NULL,
+  `logradouro` VARCHAR(100) NULL DEFAULT NULL,
+  `Cep_local` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`Id_logradouro`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `vendas`.`tpessoa`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vendas`.`tpessoa` (
+  `Id_pessoa` INT(11) NOT NULL,
+  `Nome` VARCHAR(100) NULL DEFAULT NULL,
+  `CPF` VARCHAR(100) NULL DEFAULT NULL,
+  `Datanasc` DATE NULL DEFAULT NULL,
+  `Sexo` VARCHAR(20) NULL DEFAULT NULL,
+  `Telefone` INT(13) NULL DEFAULT NULL,
+  `Id_bairro` INT(11) NULL DEFAULT NULL,
+  `Id_cidade` INT(11) NULL DEFAULT NULL,
+  `Id_logradouro` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`Id_pessoa`),
+  INDEX `Id_bairro` (`Id_bairro` ASC),
+  INDEX `Id_cidade` (`Id_cidade` ASC),
+  INDEX `Id_logradouro` (`Id_logradouro` ASC),
+  CONSTRAINT `tpessoa_ibfk_1`
+    FOREIGN KEY (`Id_bairro`)
+    REFERENCES `vendas`.`tbairro` (`Id_bairro`)
+    ON DELETE SET NULL,
+  CONSTRAINT `tpessoa_ibfk_2`
+    FOREIGN KEY (`Id_cidade`)
+    REFERENCES `vendas`.`tcidade` (`Id_cidade`)
+    ON DELETE SET NULL,
+  CONSTRAINT `tpessoa_ibfk_3`
+    FOREIGN KEY (`Id_logradouro`)
+    REFERENCES `vendas`.`tlogradouro` (`Id_logradouro`)
+    ON DELETE SET NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `vendas`.`tclientes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vendas`.`tclientes` (
+  `Id_Cliente` INT(11) NOT NULL,
+  `Id_pessoa` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`Id_Cliente`),
+  INDEX `Id_pessoa` (`Id_pessoa` ASC),
+  CONSTRAINT `tclientes_ibfk_1`
+    FOREIGN KEY (`Id_pessoa`)
+    REFERENCES `vendas`.`tpessoa` (`Id_pessoa`)
+    ON DELETE SET NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `vendas`.`tdepartamentos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vendas`.`tdepartamentos` (
+  `Id_departamentos` INT(11) NOT NULL,
+  `Descricao` VARCHAR(30) NULL DEFAULT NULL,
+  PRIMARY KEY (`Id_departamentos`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `vendas`.`tdesconto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vendas`.`tdesconto` (
+  `Id_desconto` INT(11) NOT NULL,
+  `Desconto` INT(11) NULL DEFAULT NULL,
+  `Id_produto` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`Id_desconto`),
+  INDEX `Id_produto` (`Id_produto` ASC),
+  CONSTRAINT `tdesconto_ibfk_1`
+    FOREIGN KEY (`Id_produto`)
+    REFERENCES `vendas`.`tprodutos` (`Id_produto`)
+    ON DELETE SET NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `vendas`.`tfuncionarios`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vendas`.`tfuncionarios` (
+  `Id_funcionario` INT(11) NOT NULL,
+  `Id_pessoa` INT(11) NULL DEFAULT NULL,
+  `Id_departamentos` INT(11) NULL DEFAULT NULL,
+  `Cargo` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`Id_funcionario`),
+  INDEX `Id_pessoa` (`Id_pessoa` ASC),
+  INDEX `Id_departamentos` (`Id_departamentos` ASC),
+  CONSTRAINT `tfuncionarios_ibfk_1`
+    FOREIGN KEY (`Id_pessoa`)
+    REFERENCES `vendas`.`tpessoa` (`Id_pessoa`)
+    ON DELETE SET NULL,
+  CONSTRAINT `tfuncionarios_ibfk_2`
+    FOREIGN KEY (`Id_departamentos`)
+    REFERENCES `vendas`.`tdepartamentos` (`Id_departamentos`)
+    ON DELETE SET NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `vendas`.`tvendas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `vendas`.`tvendas` (
+  `Id_venda` INT(11) NOT NULL,
+  `Id_Itensvenda` INT(11) NULL DEFAULT NULL,
+  `Id_funcionario` INT(11) NULL DEFAULT NULL,
+  `Id_cliente` INT(11) NULL DEFAULT NULL,
+  `Hora` TIME NULL DEFAULT NULL,
+  `Datah` DATE NULL DEFAULT NULL,
+  `Notafiscal` DECIMAL(10,4) NULL DEFAULT NULL,
+  PRIMARY KEY (`Id_venda`),
+  INDEX `Id_funcionario` (`Id_funcionario` ASC),
+  INDEX `Id_Itensvenda` (`Id_Itensvenda` ASC),
+  INDEX `Id_cliente` (`Id_cliente` ASC),
+  CONSTRAINT `tvendas_ibfk_1`
+    FOREIGN KEY (`Id_funcionario`)
+    REFERENCES `vendas`.`tfuncionarios` (`Id_funcionario`)
+    ON DELETE SET NULL,
+  CONSTRAINT `tvendas_ibfk_2`
+    FOREIGN KEY (`Id_Itensvenda`)
+    REFERENCES `vendas`.`itensvenda` (`Id_itensvenda`)
+    ON DELETE SET NULL,
+  CONSTRAINT `tvendas_ibfk_3`
+    FOREIGN KEY (`Id_cliente`)
+    REFERENCES `vendas`.`tclientes` (`Id_Cliente`)
+    ON DELETE SET NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

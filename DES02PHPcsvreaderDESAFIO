@@ -1,0 +1,28 @@
+<?php
+
+$delimitador = ',';
+$cerca = '"';
+
+$f = fopen('teste.csv', 'r');
+if ($f) { 
+
+    $cabecalho = fgetcsv($f, 0, $delimitador, $cerca);
+
+    while (!feof($f)) { 
+
+        $linha = fgetcsv($f, 0, $delimitador, $cerca);
+        if (!$linha) {
+            continue;
+        }
+
+        $registro = array_combine($cabecalho, $linha);
+
+        echo $registro['nome'].PHP_EOL;
+    }
+	
+    fclose($f);
+}
+
+//utilizando o fgetcsv, Le cabecalho, lendo cada linha e cria a compilação dos valores do csv, com nome.
+
+//Desafio 2: Crie um importador de produtos (em PHP) para realizar a importação a partir de um arquivo CSV. Arquivo irá conter:•Código•Descrição•Preço
